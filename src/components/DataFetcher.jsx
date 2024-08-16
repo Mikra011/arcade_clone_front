@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function DataFetcher({ url, children }) {
     const [data, setData] = useState([]);
@@ -8,12 +9,8 @@ export default function DataFetcher({ url, children }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const result = await response.json();
-                setData(result);
+                const response = await axios.get(url);
+                setData(response.data);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -28,5 +25,4 @@ export default function DataFetcher({ url, children }) {
     if (error) return <div>Error: {error}</div>;
 
     return children(data);
-};
-
+}
