@@ -1,39 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
-/* App.css */
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px; /* Space between cards */
-  justify-content: center;
-}
-
-.card {
-  width: 440px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-}
-
-.card-img {
-  width: 100%;
-  height: 144px; /* 2/3 of 440px */
-  background-size: cover;
-  background-position: center;
-}
-
-.card-name {
-  padding: 16px;
-  text-align: center;
-  font-size: 16px;
-  color: #333;
-  background-color: #f4f4f4; /* Background color for the text section */
-}
 

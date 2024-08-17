@@ -1,19 +1,17 @@
 import React from 'react';
 import '../styles/App.css';
-import DataFetcher from './DataFetcher.jsx';
-import Card from './Card';
+import SectionList from './SectionList';
+import TopicList from './TopicList';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <DataFetcher url="http://localhost:5000/api/sections">
-      {(data) => (
-        <div className="flex flex-wrap gap-4 justify-center">
-          {data.map((item, index) => (
-            <Card key={index} item={item} />
-          ))}
-        </div>
-      )}
-    </DataFetcher>
+    <div className='bg-gradient-to-t from-blue-900 to-gray-700 p-12'>
+        <Routes>
+            <Route path="/" element={<SectionList />} />
+            <Route path="/:id" element={<TopicList />} />
+        </Routes>
+    </div>
   );
 }
 
