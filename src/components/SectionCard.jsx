@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 
 export default function SectionCard({ item }) {
     return (
-        <Link to={`/${item.id}`} className="w-[440px] overflow-hidden shadow-sm bg-white">
+        <Link
+            to={`/${item.id}`}
+            className="
+            w-[440px] overflow-hidden shadow-sm bg-white
+            transition-transform transform hover:translate-y-[-4px]">
             <div
                 className="w-full h-[144px] bg-cover bg-center"
                 style={{ backgroundImage: `url(${item.section_img_url})` }}
