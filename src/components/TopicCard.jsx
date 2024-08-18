@@ -2,9 +2,9 @@ import React from 'react';
 
 export default function TopicCard({ item }) {
     return (
-        <div className="w-[440px] overflow-hidden shadow-sm bg-white">
+        <div className="w-[896px] overflow-hidden shadow-sm bg-white rounded-md">
             <div
-                className="w-full h-[144px] bg-cover bg-center"
+                className="w-full h-[232px] bg-cover bg-center"
                 style={{ backgroundImage: `url(${item.topic_img_url})` }}
             >
             </div>
