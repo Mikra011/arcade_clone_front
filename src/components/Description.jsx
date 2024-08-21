@@ -4,7 +4,7 @@ import '../styles/description.css'
 
 export default function Description() {
     const [description, setDescription] = useState('');
-    const { data: challenge, error, isLoading } = useGetChallengesByIdQuery(12); // Change `1` to the ID you want to test
+    const { data: challenge, error, isLoading } = useGetChallengesByIdQuery(1); // Change `1` to the ID you want to test
 
     useEffect(() => {
         if (challenge) {

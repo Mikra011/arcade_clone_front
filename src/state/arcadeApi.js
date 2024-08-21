@@ -10,7 +10,7 @@ export const arcadeApi = createApi({
             providesTags: ['Sections'],
         }),
         getTopicsById: builder.query({
-            query: (id) => `topics/${id}`,
+            query: (sectionName) => `topics/${sectionName}`,
             providesTags: ['Topic']
         }),
         getChallengesById: builder.query({

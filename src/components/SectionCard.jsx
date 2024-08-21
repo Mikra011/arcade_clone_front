@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function SectionCard({ item }) {
     return (
         <Link
-            to={`/${item.id}`}
+            to={`/${item.section_name}`}
             className="
             w-[440px] overflow-hidden shadow-sm bg-white
             transition-transform transform hover:translate-y-[-4px]">
