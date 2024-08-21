@@ -39,16 +39,16 @@ export default function TopicCard({ item, isDropdownVisible, onCardClick }) {
 
             {/* Dropdown Content */}
             {isDropdownVisible && (
-                <div className="w-full bg-white rounded-md py-4">
-                    <div className="p-4 flex flex-col items-center">
-                        <div className="w-full flex flex-col items-center space-y-4 py-4">
+                <div className="w-full bg-white rounded-md">
+                    <div className="flex flex-col items-center">
+                        <div className="w-full flex flex-col items-center space-y-2 py-4 px-20">
                             {item.challenges.map((challenge, index) => (
                                 <div
                                     key={index}
-                                    className="flex flex-row items-center justify-between p-1 w-full max-w-[800px] border rounded-full bg-gray-100"
+                                    className="flex flex-row items-center justify-between p-1 pr-2 w-full border rounded-full bg-gray-100"
                                 >
                                     <div className='flex flex-row items-center space-x-4'>
-                                        <div className="w-10 h-10 flex justify-center items-center bg-gray-300 rounded-full text-gray-800 font-bold">
+                                        <div className="w-12 h-12 flex justify-center items-center bg-gray-300 rounded-full text-gray-800 font-bold">
                                             {challenge.order_index}
                                         </div>
                                         <h3 className="text-lg font-semibold text-gray-800">
