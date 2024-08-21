@@ -12,7 +12,7 @@ export default function SectionList(){
     return (
         <div className="flex flex-col gap-4 justify-center items-center">
             {sections.map((section, index) => (
-                <SectionCard key={index} item={section} />
+                <SectionCard key={index} sectionData={section} />
             ))}
         </div>
     );

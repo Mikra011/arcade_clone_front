@@ -1,22 +1,4 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 20px;
-    line-height: 1.6;
-    color: #333;
-}
-
-.description-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-h3 {
+.description-container h3 {
     overflow: hidden;
     color: #000000 !important;
     font-size: 1.2rem !important;
@@ -27,19 +9,19 @@ h3 {
     font-weight: bold !important;
 }
 
-p {
+.description-container p {
     overflow: hidden;
     margin-bottom: 15px;
     font-size: 0.9em;
 }
 
-ul {
+.description-container ul {
     overflow: hidden;
     list-style-type: none;
     padding-left: 0;
 }
 
-ul li {
+.description-container ul li {
     overflow: hidden;
     background-color: #f9f9f9;
     margin-bottom: 10px;
@@ -48,12 +30,12 @@ ul li {
     border-radius: 4px;
 }
 
-ul li p {
+.description-container ul li p {
     overflow: hidden;
     margin: 0;
 }
 
-code {
+.description-container code {
     background-color: #eee;
     padding: 2px 4px;
     border-radius: 4px;
@@ -61,17 +43,17 @@ code {
     overflow: hidden; 
 }
 
-span {
+.description-container span {
     overflow: hidden;
     font-weight: bold;
     color: black;
 }
 
-td {
+.description-container td {
     padding-left: 15px !important;
 }
 
-pre {
+.description-container pre {
     display: block;
     background-color: #eee;
     padding: 2px 4px;

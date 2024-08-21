@@ -21,7 +21,7 @@ export default function TopicList() {
             {topics.map((topic, index) => (
                 <TopicCard
                     key={index}
-                    item={topic}
+                    topicData={topic}
                     isDropdownVisible={openIndex === index}
                     onCardClick={() => handleCardClick(index)}
                 />
