@@ -10,7 +10,7 @@ export default function SectionList(){
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-        <div className="flex flex-col gap-4 justify-center items-center">
+        <div className="flex flex-col gap-4 justify-center items-center p-12">
             {sections.map((section, index) => (
                 <SectionCard key={index} sectionData={section} />
             ))}

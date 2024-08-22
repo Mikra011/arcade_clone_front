@@ -18,7 +18,7 @@ export default function Description() {
     if (error) return <div>Error loading challenge description.</div>;
 
     return (
-            <div className='p-4 bg-white rounded-lg shadow-md'>
+            <div className='p-8 bg-white'>
                 <div
                     className='description-container'
                     dangerouslySetInnerHTML={{ __html: description }}>

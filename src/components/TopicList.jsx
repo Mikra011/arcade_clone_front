@@ -16,7 +16,7 @@ export default function TopicList() {
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-        <div className="flex flex-col gap-4 justify-center items-center">
+        <div className="flex flex-col gap-4 justify-center items-center p-12">
             <h1 className='text-white p-12 text-4xl font-light capitalize tracking-widest'>{sectionName}</h1>
             {topics.map((topic, index) => (
                 <TopicCard

@@ -30,11 +30,11 @@ export default function TopicCard({ topicData, isDropdownVisible, onCardClick })
                 <div className="flex justify-center items-center space-x-4 py-3">
                     {topicData.challenges.map((challenge, index) => (
                         <Link
-                            to={`/${sectionName}/${challenge.order_index}`}
+                            to={`/${sectionName}/${challenge.id}`}
                             key={index}
                             className="w-8 h-8 flex justify-center items-center bg-white 
                             border border-gray-300 rounded-full text-gray-800 font-semibold">
-                                {challenge.order_index}
+                            {challenge.order_index}
                         </Link>
 
                     ))}
@@ -48,9 +48,10 @@ export default function TopicCard({ topicData, isDropdownVisible, onCardClick })
                     <div className="flex flex-col items-center">
                         <div className="w-full flex flex-col items-center space-y-2 py-4 px-20">
                             {topicData.challenges.map((challenge, index) => (
-                                <div
+                                <Link
+                                    to={`/${sectionName}/${challenge.id}`}
                                     key={index}
-                                    className="flex flex-row items-center justify-between p-1 pr-2 w-full border rounded-full bg-gray-100"
+                                    className="flex flex-row items-center justify-between p-1 pr-4 w-full border rounded-full bg-gray-100"
                                 >
                                     <div className='flex flex-row items-center space-x-4'>
                                         <div className="w-12 h-12 flex justify-center items-center bg-gray-300 rounded-full text-gray-800">
@@ -64,7 +65,7 @@ export default function TopicCard({ topicData, isDropdownVisible, onCardClick })
                                         className="w-8 h-8 flex justify-center items-center bg-gray-700 
                                         border border-gray-300 rounded-full">
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </div>
