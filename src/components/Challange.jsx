@@ -1,8 +1,13 @@
 import React, { useState, useRef } from 'react';
+import { useGetChallengesByIdQuery } from '../state/arcadeApi';
+import { useParams } from 'react-router-dom';
+import CodeEditor from './CodeEditor';
 import Description from './Description';
 import Tests from './Tests'
 
 export default function Challenge() {
+  const { id } = useParams()
+  const { data: challenge, error, isLoading } = useGetChallengesByIdQuery(id);
   const [dividerPosition, setDividerPosition] = useState(50) // for horizontal divider
   const [verticalDividerPosition, setVerticalDividerPosition] = useState(50) // for vertical divider
   const containerRef = useRef(null)
@@ -13,7 +18,7 @@ export default function Challenge() {
 
     const rect = containerRef.current.getBoundingClientRect()
     const newDividerPosition = ((e.clientX - rect.left) / rect.width) * 100
-    
+
     setDividerPosition(Math.max(0, Math.min(100, newDividerPosition)))
   }
 
@@ -22,7 +27,7 @@ export default function Challenge() {
 
     const rect = rightContainerRef.current.getBoundingClientRect()
     const newVerticalDividerPosition = ((e.clientY - rect.top) / rect.height) * 100
-    
+
     setVerticalDividerPosition(Math.max(0, Math.min(90, newVerticalDividerPosition)))
   }
 
@@ -42,25 +47,40 @@ export default function Challenge() {
     document.addEventListener('mouseup', handleMouseUp)
   }
 
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+  if (!challenge) return <div>No data found</div>
+
+  const formattedInputNames = [
+    ...new Set(challenge.tests.flatMap(
+      test => test.inputs.map(input => input.input_name
+      )))]
+    .join(', ')
+
   return (
     <div ref={containerRef} className="flex w-full h-screen">
       <div style={{ width: `${dividerPosition}%` }} className="bg-white overflow-auto">
-        <Description />
+        <Description description={challenge.description} />
       </div>
       <div
         onMouseDown={handleMouseDown}
         className="w-1 bg-gray-600 cursor-col-resize"
       />
-      <div style={{ width: `${100 - dividerPosition}%` }} className="flex flex-col bg-slate-900 text-white " ref={rightContainerRef}>
+      <div 
+      style={{ width: `${100 - dividerPosition}%` }} 
+      className="flex flex-col bg-slate-900 text-white " 
+      ref={rightContainerRef}>
         <div style={{ height: `${verticalDividerPosition}%` }} className="">
-          <p>Upper right content</p>
+          <CodeEditor 
+          input={formattedInputNames}/>
         </div>
         <div
           onMouseDown={handleVerticalMouseDown}
           className="h-1 bg-gray-600 cursor-row-resize"
         />
         <div style={{ height: `${100 - verticalDividerPosition}%` }} className="overflow-auto">
-          <Tests />
+          {/* I was a bit lazy, may fix it later on */}
+          <Tests challenge={challenge}/> 
         </div>
       </div>
     </div>

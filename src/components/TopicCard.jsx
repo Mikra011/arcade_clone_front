@@ -5,7 +5,7 @@ export default function TopicCard({ topicData, isDropdownVisible, onCardClick })
     const { sectionName } = useParams();
 
     return (
-        <div className="relative w-[896px] bg-white rounded-md mb-12">
+        <div className="relative w-[896px] bg-white rounded-md mb-10">
 
             {/* Topic Name on Top Border */}
             <div className='flex justify-center'>
@@ -19,7 +19,7 @@ export default function TopicCard({ topicData, isDropdownVisible, onCardClick })
 
             {/* Background Image */}
             <div
-                className="relative w-full h-[232px] bg-cover bg-center cursor-pointer"
+                className="relative w-full h-[232px] bg-cover bg-center cursor-pointer rounded-md"
                 style={{ backgroundImage: `url(${topicData.topic_img_url})` }}
                 onClick={onCardClick}
             >

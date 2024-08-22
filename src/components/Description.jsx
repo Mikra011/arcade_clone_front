@@ -1,29 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useGetChallengesByIdQuery } from '../state/arcadeApi'; 
-import { useParams } from 'react-router-dom';
-import '../styles/description.css'
+import React from 'react';
+import '../styles/description.css';
 
-export default function Description() {
-    const { id } = useParams()
-    const [description, setDescription] = useState('');
-    const { data: challenge, error, isLoading } = useGetChallengesByIdQuery(id); // Change `1` to the ID you want to test
-
-    useEffect(() => {
-        if (challenge) {
-            setDescription(challenge.description);
-        }
-    }, [challenge]);
-
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading challenge description.</div>;
-
+export default function Description({ description }) {
     return (
-            <div className='p-8 bg-white'>
-                <div
-                    className='description-container'
-                    dangerouslySetInnerHTML={{ __html: description }}>
-                </div>
-            </div>
-    );
+        <div className='p-8 bg-white'>
+            <div
+                className='description-container'
+                dangerouslySetInnerHTML={{ __html: description }}
+            />
+        </div>
+    )
 }
-
