@@ -19,7 +19,7 @@ export default function TopicCard({ topicData, isDropdownVisible, onCardClick })
 
             {/* Background Image */}
             <div
-                className="relative w-full h-[232px] bg-cover bg-center cursor-pointer rounded-md"
+                className="relative w-full h-[232px] bg-cover bg-center cursor-pointer rounded-t-md"
                 style={{ backgroundImage: `url(${topicData.topic_img_url})` }}
                 onClick={onCardClick}
             >

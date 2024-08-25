@@ -32,7 +32,7 @@ export default function Tests({ challenge }) {
                     {openDropdown === test.test_id && (
                         <div className="border border-t-0 border-l-0 border-slate-700">
                             <div className="flex h-full">
-                                <div className="flex flex-col w-1/4">
+                                <div className="flex flex-col">
                                     <div className="flex flex-col">
                                         <button
                                             className={`
@@ -76,12 +76,12 @@ export default function Tests({ challenge }) {
                                         </button>
                                     </div>
                                 </div>
-                                <div className="flex-grow p-4">
+                                <div className="flex-grow p-4 overflow-hidden">
                                     {selectedSection === 'Inputs' && (
                                         <div>
-                                            <div className="space-y-1">
+                                            <div className="space-y-1 overflow-hidden">
                                                 {test.inputs.map((input, i) => (
-                                                    <div key={i} className='text-sm border-2'>
+                                                    <div key={i} className='text-sm overflow-hidden'>
                                                         {input.input_name}: {input.input_value}
                                                     </div>
                                                 ))}
