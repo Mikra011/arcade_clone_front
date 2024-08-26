@@ -11,16 +11,23 @@ export const arcadeApi = createApi({
         }),
         getTopicsById: builder.query({
             query: (sectionName) => `topics/${sectionName}`,
-            providesTags: ['Topic']
+            providesTags: ['Topics']
         }),
         getChallengesById: builder.query({
             query: (id) => `challenges/${id}`,
-            providesTags: ['Challenge']
+            providesTags: ['Challenges']
         }),
-        // for other then get I must use mutation!!!!
+        runTest: builder.mutation({
+            query: ({ code, tests }) => ({
+                url: `challenges/code`,
+                method: 'POST',
+                body: { code, tests }
+            }),
+            invalidatesTags: ['Challenges'],
+        }),
     })
 })
 
 export const {
-    useGetSectionsQuery, useGetTopicsByIdQuery, useGetChallengesByIdQuery
+    useGetSectionsQuery, useGetTopicsByIdQuery, useGetChallengesByIdQuery, useRunTestMutation
 } = arcadeApi

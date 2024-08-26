@@ -1,10 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 
-export default function TestNavBar() {
-
+export default function TestNavBar({ onRunTest }) {
     return (
         <div className="text-white flex items-center justify-end px-4 py-1 border-b border-slate-700">
-            <button className="flex items-center bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-2 rounded h-[24px] text-center">
+            <button
+                className="flex items-center bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-2 rounded h-[24px] text-center"
+                onClick={onRunTest} // Call the function passed from the parent component
+            >
                 <svg
                     className="mr-2" 
                     width="16"

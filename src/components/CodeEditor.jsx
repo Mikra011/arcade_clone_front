@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Editor } from '@monaco-editor/react';
 
-export default function CodeEditor({ input }) {
+export default function CodeEditor({ input, onChange }) {
     const [code, setCode] = useState(`function solution( ${input} ) {\n  // Write code here\n}`)
 
     const handleEditorChange = (value) => {
         setCode(value);
+        if (onChange) onChange(value)
     };
 
     const handleEditorDidMount = (editor, monaco) => {
