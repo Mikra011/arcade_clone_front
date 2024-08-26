@@ -3,6 +3,7 @@ import { useGetChallengesByIdQuery } from '../state/arcadeApi';
 import { useParams } from 'react-router-dom';
 import CodeEditor from './CodeEditor';
 import Description from './Description';
+import TestNavBar from './TestNavBar';
 import Tests from './Tests'
 
 export default function Challenge() {
@@ -79,6 +80,7 @@ export default function Challenge() {
           className="h-1 bg-gray-600 cursor-row-resize"
         />
         <div style={{ height: `${100 - verticalDividerPosition}%` }} className="overflow-auto">
+          <TestNavBar />
           {/* I was a bit lazy, may fix it later on */}
           <Tests challenge={challenge}/> 
         </div>
