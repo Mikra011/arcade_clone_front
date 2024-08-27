@@ -32,7 +32,7 @@ export default function Challenge() {
     const rect = rightContainerRef.current.getBoundingClientRect()
     const newVerticalDividerPosition = ((e.clientY - rect.top) / rect.height) * 100
 
-    setVerticalDividerPosition(Math.max(0, Math.min(90, newVerticalDividerPosition)))
+    setVerticalDividerPosition(Math.max(0, Math.min(95, newVerticalDividerPosition)))
   }
 
   const handleMouseUp = () => {
@@ -72,8 +72,8 @@ export default function Challenge() {
       }, {}),
     }))
 
-    console.log("Code:", code)
-    console.log("Test Data:", testData)
+    // console.log("Code:", code)
+    // console.log("Test Data:", testData)
 
     runTest({ code, tests: testData }).then(response => {
       // Handle response if needed
@@ -106,7 +106,9 @@ export default function Challenge() {
           onMouseDown={handleVerticalMouseDown}
           className="h-1 bg-gray-600 cursor-row-resize"
         />
-        <div style={{ height: `${100 - verticalDividerPosition}%` }} className="overflow-auto">
+        <div
+          style={{ height: `${100 - verticalDividerPosition}%` }}
+          className="overflow-auto relative">
           <TestNavBar onRunTest={handleRunTest} />
           {/* I was a bit lazy, may fix it later on */}
           <Tests challenge={challenge} />

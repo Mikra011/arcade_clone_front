@@ -2,7 +2,10 @@ import React from 'react';
 
 export default function TestNavBar({ onRunTest }) {
     return (
-        <div className="text-white flex items-center justify-end px-4 py-1 border-b border-slate-700">
+        <div className="sticky z-10 top-0 text-white flex items-center justify-between px-4 py-1 border-b border-slate-700 bg-slate-900">
+            <button className='text-white text-base font-bold'>
+                TESTS
+            </button>
             <button
                 className="flex items-center bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-2 rounded h-[24px] text-center"
                 onClick={onRunTest} // Call the function passed from the parent component
