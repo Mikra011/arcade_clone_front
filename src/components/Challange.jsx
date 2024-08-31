@@ -66,14 +66,18 @@ export default function Challenge() {
     const testData = challenge.tests.map(test => ({
       test_id: test.test_id,
       expected_output: test.expected_output,
+      is_complex: test.is_complex,
       inputs: test.inputs.reduce((acc, input) => {
-        acc[input.input_name] = input.input_value
+        acc[input.input_name] = {
+          value: input.input_value,
+          type: input.input_type,
+        }
         return acc
       }, {}),
     }))
 
-    // console.log("Code:", code)
-    // console.log("Test Data:", testData)
+    console.log("Code:", code)
+    console.log("Test Data:", testData)
 
     runTest({ code, tests: testData }).then(response => {
       // Handle response if needed
