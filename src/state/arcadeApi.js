@@ -1,8 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api/'
+
 export const arcadeApi = createApi({
     reducerPath: 'arcadeApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api/' }),
+    baseQuery: fetchBaseQuery({ baseUrl }),
     tagTypes: ['Sections', 'Topics', 'Challenges'],
     endpoints: builder => ({
         getSections: builder.query({
