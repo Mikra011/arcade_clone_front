@@ -66,6 +66,7 @@ export default function Challenge() {
 
   const handleRunTest = () => {
     const testData = challenge.tests.map(test => ({
+      is_sample: test.is_sample,
       test_id: test.test_id,
       expected_output: test.expected_output,
       is_complex: test.is_complex,
@@ -79,7 +80,7 @@ export default function Challenge() {
     }))
 
     // console.log("Code:", code)
-    // console.log("Test Data:", testData)
+    console.log("Test Data:", testData)
 
     runTest({ code, tests: testData })
       .then(response => {
