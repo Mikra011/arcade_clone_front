@@ -1,13 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import TestDropdownButton from './TestDropdownButton';
 
 export default function Tests({ challenge, testResults, errorMessage }) {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedSection, setSelectedSection] = useState('Inputs');
+    const [returnDividerPosition, setReturnDividerPosition] = useState(80);
+
+    const containerRef = useRef(null)
+    const isDragging = useRef(false)
+
+    // Handles the movement of the divider (dragging)
+    const handleMouseMove = (e) => {
+        if (!isDragging.current || !containerRef.current) return
+
+        const rect = containerRef.current.getBoundingClientRect()
+        const newDividerPosition = ((e.clientX - rect.left) / rect.width) * 100
+
+        setReturnDividerPosition(Math.max(0, Math.min(100, newDividerPosition))) // Keep the divider within bounds
+    }
+
+    // Handles the mouse down event (when the user starts dragging)
+    const handleMouseDown = () => {
+        isDragging.current = true
+        document.addEventListener('mousemove', handleMouseMove)
+        document.addEventListener('mouseup', handleMouseUp)
+    }
+
+    // Handles the mouse up event (when the user stops dragging)
+    const handleMouseUp = () => {
+        isDragging.current = false
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+    }
+
 
     const handleDropdownClick = (testId) => {
-        setOpenDropdown((prevId) => (prevId === testId ? null : testId));
-    };
+        setOpenDropdown((prevId) => (prevId === testId ? null : testId))
+    }
 
     const totalTests = challenge.tests.length;
     const passedTests = testResults
@@ -36,76 +65,80 @@ export default function Tests({ challenge, testResults, errorMessage }) {
                     <span>Tests passed: {passedTests}/{totalTests}</span>
                 </div>
             )}
-            {challenge.tests.map((test, index) => (
-                <div key={test.test_id} className="mb-1">
-                    <div className="
+            {challenge.tests.map((test, index) => {
+                // Find the matching test result using the test_id
+                const result = testResults?.results.find(r => r.test_id === test.test_id);
+
+                return (
+
+                    <div key={test.test_id} className="mb-1">
+                        <div className="
                     flex justify-between items-center cursor-pointer 
                     p-2 border border-slate-700 overflow-hidden"
-                        onClick={() => handleDropdownClick(test.test_id)}>
-                        <div className="flex items-center space-x-2">
-                            <svg
-                                className={`w-2 h-2 text-white transition-transform ${openDropdown === test.test_id ? 'rotate-0' : '-rotate-90'}`}
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M.44 6.22L12 17.78 23.56 6.22H.44z" fill="currentColor"></path>
-                            </svg>
-                            <span>Test {index + 1}</span>
-                            {!test.is_sample && (
-                                <svg width="24" height="24" viewBox="0 0 24 24" className="text-gray-400">
-                                    <path fill="currentColor" fillRule="evenodd" clipRule="evenodd" d="M4.7 6.5L2 3.8l1.4-1.4 17.7 17.8-1.4 1.4-3.4-3.4A11.8 11.8 0 011 11.5c.8-2 2-3.7 3.7-5zM12 6c3.8 0 7.2 2.1 8.8 5.5a9.6 9.6 0 01-2.4 3.1l1.4 1.4c1.4-1.2 2.5-2.8 3.2-4.5a11.8 11.8 0 00-14.6-7L10 6.2l2-.2zM11 7l2 2c.6.3 1 .8 1.3 1.4l2 2 .2-1A4.5 4.5 0 0010.9 7zm-1.5 4.2l2.6 2.7H12a2.5 2.5 0 01-2.5-2.6zM8 9.7L6 7.9a9.9 9.9 0 00-3 3.6 9.8 9.8 0 0011.7 5l-1-.9a4.5 4.5 0 01-6-5.9z"></path>
+                            onClick={() => handleDropdownClick(test.test_id)}>
+                            <div className="flex items-center space-x-2">
+                                <svg
+                                    className={`w-2 h-2 text-white transition-transform ${openDropdown === test.test_id ? 'rotate-0' : '-rotate-90'}`}
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M.44 6.22L12 17.78 23.56 6.22H.44z" fill="currentColor"></path>
                                 </svg>
-                            )}
-                        </div>
-                        <div>
-                            {testResults ? (
-                                testResults.results.find(result => result.test_id === test.test_id)?.passed ? (
-                                    <div className="flex flex-row text-green-200">
-                                        <span>Passed</span>
-                                        <span>
-                                            <svg width="24" height="24" viewBox="0 0 24 24">
-                                                <path d="M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z"
-                                                    fill="currentColor"></path>
-                                            </svg>
-                                        </span>
-                                    </div>
+                                <span>Test {index + 1}</span>
+                                {!test.is_sample && (
+                                    <svg width="24" height="24" viewBox="0 0 24 24" className="text-gray-400">
+                                        <path fill="currentColor" fillRule="evenodd" clipRule="evenodd" d="M4.7 6.5L2 3.8l1.4-1.4 17.7 17.8-1.4 1.4-3.4-3.4A11.8 11.8 0 011 11.5c.8-2 2-3.7 3.7-5zM12 6c3.8 0 7.2 2.1 8.8 5.5a9.6 9.6 0 01-2.4 3.1l1.4 1.4c1.4-1.2 2.5-2.8 3.2-4.5a11.8 11.8 0 00-14.6-7L10 6.2l2-.2zM11 7l2 2c.6.3 1 .8 1.3 1.4l2 2 .2-1A4.5 4.5 0 0010.9 7zm-1.5 4.2l2.6 2.7H12a2.5 2.5 0 01-2.5-2.6zM8 9.7L6 7.9a9.9 9.9 0 00-3 3.6 9.8 9.8 0 0011.7 5l-1-.9a4.5 4.5 0 01-6-5.9z"></path>
+                                    </svg>
+                                )}
+                            </div>
+                            <div>
+                                {testResults ? (
+                                    testResults.results.find(result => result.test_id === test.test_id)?.passed ? (
+                                        <div className="flex flex-row text-green-200">
+                                            <span>Passed</span>
+                                            <span>
+                                                <svg width="24" height="24" viewBox="0 0 24 24">
+                                                    <path d="M8.795 15.875l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41-10.59 10.58z"
+                                                        fill="currentColor"></path>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-row text-red-500">
+                                            <span>Wrong Answer</span>
+                                            <span>
+                                                <svg width="24" height="24" viewBox="0 0 24 24">
+                                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+                                                        fill="currentColor"></path>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    )
                                 ) : (
-                                    <div className="flex flex-row text-red-500">
-                                        <span>Wrong Answer</span>
-                                        <span>
-                                            <svg width="24" height="24" viewBox="0 0 24 24">
-                                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
-                                                    fill="currentColor"></path>
-                                            </svg>
-                                        </span>
-                                    </div>
-                                )
-                            ) : (
-                                <div className="w-4 h-4 rounded-full border"></div>
-                            )}
+                                    <div className="w-4 h-4 rounded-full border"></div>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    {openDropdown === test.test_id && (
-                        <div className="border border-t-0 border-l-0 border-slate-700">
-                            {test.is_sample ? (
-                                <div className="flex h-full">
-                                    <div className="flex flex-col">
+                        {openDropdown === test.test_id && (
+                            <div className="border border-t-0 border-l-0 border-slate-700">
+                                {test.is_sample ? (
+                                    <div className="flex h-full">
                                         <div className="flex flex-col">
-                                            {['Inputs', 'Return Value', 'Console Output', 'Error Output'].map((section) => (
-                                                <TestDropdownButton
-                                                    key={section}
-                                                    label={section}
-                                                    isActive={selectedSection === section}
-                                                    onClick={() => setSelectedSection(section)}
-                                                />
-                                            ))}
+                                            <div className="flex flex-col">
+                                                {['Inputs', 'Return Value', 'Console Output', 'Error Output'].map((section) => (
+                                                    <TestDropdownButton
+                                                        key={section}
+                                                        label={section}
+                                                        isActive={selectedSection === section}
+                                                        onClick={() => setSelectedSection(section)}
+                                                    />
+                                                ))}
+                                            </div>
                                         </div>
 
-                                    </div>
-                                    <div className="flex-grow p-4 overflow-hidden">
                                         {selectedSection === 'Inputs' && (
-                                            <div>
+                                            <div className='flex-grow p-4 overflow-hidden'>
                                                 <div className="space-y-1 overflow-hidden">
                                                     {test.inputs.map((input, i) => (
                                                         <div key={i} className="text-sm overflow-hidden">
@@ -116,19 +149,36 @@ export default function Tests({ challenge, testResults, errorMessage }) {
                                             </div>
                                         )}
                                         {selectedSection === 'Return Value' && (
-                                            <div>
-                                                <h3 className="mb-2">Expected output:</h3>
-                                                <div className="p-2">{test.expected_output}</div>
+                                            <div
+                                                ref={containerRef}
+                                                className="flex w-full overflow-hidden">
+                                                {/* Left Side */}
+                                                <div style={{ width: `${returnDividerPosition}%` }} className="overflow-hidden p-4">
+                                                    <h3 className="mb-2">Expected output:</h3>
+                                                    <div className="p-2">{test.expected_output}</div>
+                                                </div>
+
+                                                {/* Draggable Divider */}
+                                                <div
+                                                    onMouseDown={handleMouseDown}
+                                                    className="w-1 bg-gray-600 cursor-col-resize"
+                                                ></div>
+
+                                                {/* Right Side */}
+                                                <div style={{ width: `${100 - returnDividerPosition}%` }} className="overflow-hidden p-4">
+                                                    <h3 className="mb-2">Your return value:</h3>
+                                                    <div className="p-2">{result.result}</div>
+                                                </div>
                                             </div>
                                         )}
                                         {selectedSection === 'Console Output' && (
-                                            <div>
+                                            <div className='flex-grow p-4 overflow-hidden'>
                                                 <h3 className="font-semibold mb-2">Console Output:</h3>
                                                 <div className="p-2">Console output here</div>
                                             </div>
                                         )}
                                         {selectedSection === 'Error Output' && (
-                                            <div>
+                                            <div className='flex-grow p-4 overflow-hidden'>
                                                 <h3 className="font-semibold mb-2">Error Output:</h3>
                                                 <div className="p-2">{errorMessage && (
                                                     <span>{errorMessage}</span>
@@ -136,14 +186,14 @@ export default function Tests({ challenge, testResults, errorMessage }) {
                                             </div>
                                         )}
                                     </div>
-                                </div>
-                            ) : (
-                                <div className="p-2 text-gray-500 border border-t-0 border-r-0 border-b-0 border-slate-700">hidden</div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            ))}
+                                ) : (
+                                    <div className="p-2 text-gray-500 border border-t-0 border-r-0 border-b-0 border-slate-700">hidden</div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )
+            })}
         </div>
     );
 }

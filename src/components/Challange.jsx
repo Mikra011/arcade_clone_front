@@ -12,7 +12,6 @@ export default function Challenge() {
   const [runTest] = useRunTestMutation()
   const [code, setCode] = useState('');
   const [testResults, setTestResults] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   const [dividerPosition, setDividerPosition] = useState(50) // for horizontal divider
   const [verticalDividerPosition, setVerticalDividerPosition] = useState(50) // for vertical divider
@@ -79,35 +78,17 @@ export default function Challenge() {
       }, {}),
     }))
 
-    // console.log("Code:", code)
+    console.log("Code:", code)
     console.log("Test Data:", testData)
 
-    runTest({ code, tests: testData })
-      .then(response => {
-        console.log('Test Run Response:', response) // Inspect the response object
-        setTestResults(response.data);
-        setErrorMessage(null);
-      })
-      .catch(error => {
-        console.error('Run Test Error:', error) // Inspect the error object
-        console.log('Error Response Data:', error.response?.data) // Inspect error response data
-
-        let errorM = 'An unexpected error occurred'; // Default error message
-
-        if (error?.response?.data?.results) {
-          errorM = error.response.data.results
-            .map(result => `Test ID ${result.test_id}: ${result.error.message}`)
-            .join('\n');
-        } else if (error?.response?.data?.error) {
-          errorM = error.response.data.error;
-        }
-
-        setErrorMessage(errorM)
-        setTestResults(null)
-      })
+    runTest({ code, tests: testData }).then(response => {
+      setTestResults(response.data)
+    }).catch(error => {
+      // Handle error if needed
+      console.error(error)
+    })
   }
 
-  // console.log(errorMessage)
   return (
     <div ref={containerRef} className="flex w-full h-screen">
       <div style={{ width: `${dividerPosition}%` }} className="bg-white overflow-auto">
@@ -135,9 +116,41 @@ export default function Challenge() {
           className="overflow-auto relative">
           <TestNavBar onRunTest={handleRunTest} />
           {/* I was a bit lazy, may fix it later on */}
-          <Tests challenge={challenge} testResults={testResults} errorMessage={errorMessage} />
+          <Tests challenge={challenge} testResults={testResults} />
+          {/* testResults={testResults} errorMessage={errorMessage} */}
         </div>
       </div>
     </div>
   )
 }
+
+
+// const [errorMessage, setErrorMessage] = useState(null);
+
+
+//   runTest({ code, tests: testData })
+//     .then(response => {
+//       console.log('Test Run Response:', response) // Inspect the response object
+//       setTestResults(response.data);
+//       setErrorMessage(null);
+//     })
+//     .catch(error => {
+//       console.error('Run Test Error:', error) // Inspect the error object
+//       console.log('Error Response Data:', error.response?.data) // Inspect error response data
+
+//       let errorM = 'An unexpected error occurred'; // Default error message
+
+//       if (error?.response?.data?.results) {
+//         errorM = error.response.data.results
+//           .map(result => `Test ID ${result.test_id}: ${result.error.message}`)
+//           .join('\n');
+//       } else if (error?.response?.data?.error) {
+//         errorM = error.response.data.error;
+//       }
+
+//       setErrorMessage(errorM)
+//       setTestResults(null)
+//     })
+// }
+
+// console.log(errorMessage)
