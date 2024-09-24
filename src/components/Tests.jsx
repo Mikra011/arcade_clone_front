@@ -4,7 +4,7 @@ import TestDropdownButton from './TestDropdownButton';
 export default function Tests({ challenge, testResults, errorMessage }) {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedSection, setSelectedSection] = useState('Inputs');
-    const [returnDividerPosition, setReturnDividerPosition] = useState(80);
+    const [returnDividerPosition, setReturnDividerPosition] = useState(50);
 
     const containerRef = useRef(null)
     const isDragging = useRef(false)
@@ -67,7 +67,7 @@ export default function Tests({ challenge, testResults, errorMessage }) {
             )}
             {challenge.tests.map((test, index) => {
                 // Find the matching test result using the test_id
-                const result = testResults?.results.find(r => r.test_id === test.test_id);
+                const result = testResults?.results.find(result => result.test_id === test.test_id);
 
                 return (
 
@@ -167,7 +167,7 @@ export default function Tests({ challenge, testResults, errorMessage }) {
                                                 {/* Right Side */}
                                                 <div style={{ width: `${100 - returnDividerPosition}%` }} className="overflow-hidden p-4">
                                                     <h3 className="mb-2">Your return value:</h3>
-                                                    <div className="p-2">{result.result}</div>
+                                                    <div className="p-2 font-thin">{result?.result ? result.result : "Press 'Run Tests' button to get your return value"}</div>
                                                 </div>
                                             </div>
                                         )}

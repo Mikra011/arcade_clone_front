@@ -83,6 +83,7 @@ export default function Challenge() {
 
     runTest({ code, tests: testData }).then(response => {
       setTestResults(response.data)
+      console.log(response.data)
     }).catch(error => {
       // Handle error if needed
       console.error(error)
@@ -117,7 +118,7 @@ export default function Challenge() {
           <TestNavBar onRunTest={handleRunTest} />
           {/* I was a bit lazy, may fix it later on */}
           <Tests challenge={challenge} testResults={testResults} />
-          {/* testResults={testResults} errorMessage={errorMessage} */}
+          {/* errorMessage={errorMessage} */}
         </div>
       </div>
     </div>

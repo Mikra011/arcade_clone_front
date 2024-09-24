@@ -1,19 +1,21 @@
-// import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-// const initialState = {
+const initialState = {
+    data: null,
+}
 
-// }
+export const arcadeSlice = createSlice({
+    name: 'challenge',
+    initialState,
+    reducers: {
+        getChallenge(state, action) {
+            state.data = action.payload
+        },
+    }
+})
 
-// export const arcadeSlice = createSlice({
-//   name: '',
-//   initialState,
-//   reducers: {
-   
-//   }
-// })
+export const {
+    getChallenge
+} = arcadeSlice.actions
 
-// export const {
- 
-// } = arcadeSlice.actions
-
-// export default arcadeSlice.reducer
+export default arcadeSlice.reducer
