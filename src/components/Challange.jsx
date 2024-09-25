@@ -1,6 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useGetChallengesByIdQuery, useRunTestMutation } from '../state/arcadeApi';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { 
+  getChallenge, 
+  resetChallenge 
+} from '../state/arcadeSlice';
 import CodeEditor from './CodeEditor';
 import Description from './Description';
 import TestNavBar from './TestNavBar';
@@ -17,6 +22,8 @@ export default function Challenge() {
   const [verticalDividerPosition, setVerticalDividerPosition] = useState(50) // for vertical divider
   const containerRef = useRef(null)
   const rightContainerRef = useRef(null)
+
+  const dispatch = useDispatch()
 
   const handleMouseMove = (e) => {
     if (!containerRef.current) return
@@ -51,6 +58,20 @@ export default function Challenge() {
     document.addEventListener('mousemove', handleVerticalMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
   }
+
+  // Dispatch getChallenge when the challenge data is fetched
+  useEffect(() => {
+    if (challenge) {
+      dispatch(getChallenge(challenge));
+    }
+  }, [challenge, dispatch]);
+
+  // Dispatch resetChallenge on component unmount
+  useEffect(() => {
+    return () => {
+      dispatch(resetChallenge()); // Clear the challenge data when component unmounts
+    };
+  }, [dispatch]);
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
