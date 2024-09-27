@@ -1,10 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import TestDropdownButton from './TestDropdownButton';
+import { useRecordProgressMutation } from '../state/arcadeApi';
+import { useParams } from 'react-router-dom'
 
 export default function Tests({ challenge, testResults, errorMessage }) {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedSection, setSelectedSection] = useState('Inputs');
     const [returnDividerPosition, setReturnDividerPosition] = useState(50);
+
+    const { id } = useParams();
+    const [recordProgress] = useRecordProgressMutation();
 
     const containerRef = useRef(null)
     const isDragging = useRef(false)
@@ -44,6 +49,25 @@ export default function Tests({ challenge, testResults, errorMessage }) {
         : 0;
 
     const allTestsPassed = passedTests === totalTests;
+
+    useEffect(() => {
+        if (allTestsPassed) {
+            const progressData = { challenge_id: id, completed: true };
+
+            // Log the data being sent
+            console.log('Recording progress with data:', progressData);
+
+            // Record progress when all tests have passed
+            recordProgress(progressData)
+                .unwrap()
+                .then((response) => {
+                    console.log('Progress recorded successfully:', response);
+                })
+                .catch((error) => {
+                    console.error('Failed to record progress:', error);
+                });
+        }
+    }, [allTestsPassed, recordProgress, id]);
 
     return (
         <div className="p-4">
