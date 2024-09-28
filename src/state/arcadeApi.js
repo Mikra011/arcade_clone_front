@@ -65,7 +65,10 @@ export const arcadeApi = createApi({
                 body: { challenge_id, completed },
             }),
         }),
-
+        getProgress: builder.query({
+            query: () => `progress/get`,
+            providesTags: ['Progress'],
+        }),
     }),
 });
 
@@ -76,5 +79,6 @@ export const {
     useRunTestMutation,
     useRegisterUserMutation,
     useLoginUserMutation,
-    useRecordProgressMutation
+    useRecordProgressMutation,
+    useGetProgressQuery
 } = arcadeApi;
