@@ -1,47 +1,48 @@
 import React, { useState, useRef, useEffect } from 'react';
+import CongratModal from './CongratModal'; 
 import TestDropdownButton from './TestDropdownButton';
 import { useRecordProgressMutation } from '../state/arcadeApi';
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
 
 export default function Tests({ challenge, testResults, errorMessage }) {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedSection, setSelectedSection] = useState('Inputs');
     const [returnDividerPosition, setReturnDividerPosition] = useState(50);
+    const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
     const { id } = useParams();
     const [recordProgress] = useRecordProgressMutation();
 
-    const containerRef = useRef(null)
-    const isDragging = useRef(false)
+    const containerRef = useRef(null);
+    const isDragging = useRef(false);
 
     // Handles the movement of the divider (dragging)
     const handleMouseMove = (e) => {
-        if (!isDragging.current || !containerRef.current) return
+        if (!isDragging.current || !containerRef.current) return;
 
-        const rect = containerRef.current.getBoundingClientRect()
-        const newDividerPosition = ((e.clientX - rect.left) / rect.width) * 100
+        const rect = containerRef.current.getBoundingClientRect();
+        const newDividerPosition = ((e.clientX - rect.left) / rect.width) * 100;
 
-        setReturnDividerPosition(Math.max(0, Math.min(100, newDividerPosition))) // Keep the divider within bounds
-    }
+        setReturnDividerPosition(Math.max(0, Math.min(100, newDividerPosition))); // Keep the divider within bounds
+    };
 
     // Handles the mouse down event (when the user starts dragging)
     const handleMouseDown = () => {
-        isDragging.current = true
-        document.addEventListener('mousemove', handleMouseMove)
-        document.addEventListener('mouseup', handleMouseUp)
-    }
+        isDragging.current = true;
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    };
 
     // Handles the mouse up event (when the user stops dragging)
     const handleMouseUp = () => {
-        isDragging.current = false
-        document.removeEventListener('mousemove', handleMouseMove)
-        document.removeEventListener('mouseup', handleMouseUp)
-    }
-
+        isDragging.current = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+    };
 
     const handleDropdownClick = (testId) => {
-        setOpenDropdown((prevId) => (prevId === testId ? null : testId))
-    }
+        setOpenDropdown((prevId) => (prevId === testId ? null : testId));
+    };
 
     const totalTests = challenge.tests.length;
     const passedTests = testResults
@@ -62,6 +63,7 @@ export default function Tests({ challenge, testResults, errorMessage }) {
                 .unwrap()
                 .then((response) => {
                     console.log('Progress recorded successfully:', response);
+                    setIsModalOpen(true); // Open modal when progress is recorded
                 })
                 .catch((error) => {
                     console.error('Failed to record progress:', error);
@@ -71,6 +73,7 @@ export default function Tests({ challenge, testResults, errorMessage }) {
 
     return (
         <div className="p-4">
+            <CongratModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             {testResults && (
                 <div className={`mb-4 flex items-center space-x-2 ${allTestsPassed ? 'text-green-200' : 'text-red-500'}`}>
                     <span>

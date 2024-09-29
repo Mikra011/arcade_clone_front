@@ -2,59 +2,50 @@ import React, { useState } from 'react';
 import { useLoginUserMutation, useRegisterUserMutation } from '../state/arcadeApi';
 
 export default function AuthModal({ onClose }) {
-    const [isLogin, setIsLogin] = useState(true)
+    const [isLogin, setIsLogin] = useState(true);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [registerUser] = useRegisterUserMutation()
-    const [loginUser] = useLoginUserMutation()
+    const [registerUser] = useRegisterUserMutation();
+    const [loginUser] = useLoginUserMutation();
 
     const handleRegister = async (e) => {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
 
-        const userData = {
-            username,
-            email,
-            password,
-        };
+        const userData = { username, email, password };
 
         try {
             const result = await registerUser(userData).unwrap();
             console.log('Registration successful:', result);
-            // Handle successful registration (e.g., close modal, show a message, etc.)
             onClose();
         } catch (error) {
             console.error('Registration failed:', error);
-            // Handle error (e.g., show an error message)
         }
     };
 
     const handleLogin = async (e) => {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
 
-        const credentials = {
-            username,
-            password,
-        };
+        const credentials = { username, password };
 
         try {
             const result = await loginUser(credentials).unwrap();
-            console.log('Login successful:', result);
-            // Handle successful login (e.g., store token, close modal, redirect, etc.)
+            // console.log('Login successful:', result);
             if (result.token) {
                 localStorage.setItem('token', result.token);
+                // Trigger a refetch by updating the token in local storage
+                window.location.reload(); 
             }
             onClose();
         } catch (error) {
             console.error('Login failed:', error);
-            // Handle error (e.g., show an error message)
         }
     };
 
     const handleFormSwitch = () => {
-        setIsLogin(!isLogin) // Switch between login and register forms
-    }
+        setIsLogin(!isLogin);
+    };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

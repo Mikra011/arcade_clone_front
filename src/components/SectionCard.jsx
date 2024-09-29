@@ -5,22 +5,26 @@ import Modal from './AuthModal';
 
 export default function SectionCard({ sectionData }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [progressData, setProgressData] = useState(null); // Local state to hold progress data
+    const [progressData, setProgressData] = useState(null);
 
-    // Fetch progress data when the component mounts
-    const token = localStorage.getItem('token'); // Get the token from local storage
+    const token = localStorage.getItem('token');
 
-    const { data } = useGetProgressQuery(null, {
-        skip: !token, // Skip fetching if no token is available
-        refetchOnMountOrArgChange: true
+    const { data, refetch } = useGetProgressQuery(null, {
+        skip: !token, // Only fetch if the token is available
+        refetchOnMountOrArgChange: true, // Automatically refetch when needed
     });
 
     useEffect(() => {
-        if (data) {
-            setProgressData(data.progress); // Set the progress data to local state
-            // console.log('Fetched progress data:', data);
+        if (token) {
+            refetch(); // Refetch progress data when token is set
         }
-    }, [data]); // Dependency on data
+    }, [token, refetch]);
+
+    useEffect(() => {
+        if (data) {
+            setProgressData(data.progress);
+        }
+    }, [data]);
 
     const handleCardClick = (event) => {
         if (!token) {
@@ -47,15 +51,15 @@ export default function SectionCard({ sectionData }) {
                     style={{ backgroundImage: `url(${sectionData.section_img_url})` }}
                 >
                 </div>
-                <div className="p-4">
+                <div className="p-3">
                     <div className="text-center text-gray-800 capitalize font-black">
                         {sectionData.section_name}
                     </div>
 
                     {/* Conditionally render the progress info */}
                     {sectionProgress && (
-                        <div className="text-center text-gray-500 font-bold text-sm">
-                            Solved questions: {sectionProgress.completed_challenges} / {sectionProgress.total_challenges}
+                        <div className="mt-2 text-center text-gray-500 font-light text-sm">
+                            Solved questions: <span className='font-bold'>{sectionProgress.completed_challenges} / {sectionProgress.total_challenges}</span> 
                         </div>
                     )}
                 </div>
