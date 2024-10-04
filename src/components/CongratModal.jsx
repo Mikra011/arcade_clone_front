@@ -5,8 +5,11 @@ export default function CongratModal({ isOpen, onClose }) {
     const navigate = useNavigate()
 
     const handleClose = () => {
-        onClose()
-        navigate(-1)
+        onClose() 
+        navigate(-1) 
+        setTimeout(() => {
+            window.location.reload() // reloads page to refetch data
+        }, 0) 
     }
 
     if (!isOpen) return null
