@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useGetChallengesByIdQuery, useRunTestMutation } from '../state/arcadeApi';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { 
-  getChallenge, 
-  resetChallenge 
+import {
+  getChallenge,
+  resetChallenge
 } from '../state/arcadeSlice';
 import CodeEditor from './CodeEditor';
 import Description from './Description';
@@ -17,6 +17,7 @@ export default function Challenge() {
   const [runTest] = useRunTestMutation()
   const [code, setCode] = useState('');
   const [testResults, setTestResults] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const [dividerPosition, setDividerPosition] = useState(50) // for horizontal divider
   const [verticalDividerPosition, setVerticalDividerPosition] = useState(50) // for vertical divider
@@ -84,7 +85,7 @@ export default function Challenge() {
     .join(', ')
 
 
-  const handleRunTest = () => {
+  const handleRunTest = async () => {
     const testData = challenge.tests.map(test => ({
       is_sample: test.is_sample,
       test_id: test.test_id,
@@ -94,21 +95,29 @@ export default function Challenge() {
         acc[input.input_name] = {
           value: input.input_value,
           type: input.input_type,
-        }
-        return acc
+        };
+        return acc;
       }, {}),
-    }))
+    }));
 
-    console.log("Code:", code)
-    console.log("Test Data:", testData)
+    console.log("Code:", code);
+    console.log("Test Data:", testData);
 
-    runTest({ code, tests: testData }).then(response => {
-      setTestResults(response.data)
-      console.log(response.data)
-    }).catch(error => {
-      // Handle error if needed
-      console.error(error)
-    })
+    try {
+      const response = await runTest({ code, tests: testData }).unwrap();  // Unwrap the result to catch errors
+      setTestResults(response);  // Store successful response
+      console.log(response);
+    } catch (error) {
+      // This block will now be triggered on error
+      console.error("Run Test Error:", error);
+
+      if (error.data) {
+        console.error("Backend Error:", error.data);
+        setTestResults(error.data);  // You can store error details or display to the user
+      } else {
+        console.error("Unexpected Error:", error);
+      }
+    }
   }
 
   return (
@@ -138,41 +147,11 @@ export default function Challenge() {
           className="overflow-auto relative">
           <TestNavBar onRunTest={handleRunTest} />
           {/* I was a bit lazy, may fix it later on */}
-          <Tests challenge={challenge} testResults={testResults} />
-          {/* errorMessage={errorMessage} */}
+          <Tests challenge={challenge} testResults={testResults} errorMessage={errorMessage} />
+          
         </div>
       </div>
     </div>
   )
 }
 
-
-// const [errorMessage, setErrorMessage] = useState(null);
-
-
-//   runTest({ code, tests: testData })
-//     .then(response => {
-//       console.log('Test Run Response:', response) // Inspect the response object
-//       setTestResults(response.data);
-//       setErrorMessage(null);
-//     })
-//     .catch(error => {
-//       console.error('Run Test Error:', error) // Inspect the error object
-//       console.log('Error Response Data:', error.response?.data) // Inspect error response data
-
-//       let errorM = 'An unexpected error occurred'; // Default error message
-
-//       if (error?.response?.data?.results) {
-//         errorM = error.response.data.results
-//           .map(result => `Test ID ${result.test_id}: ${result.error.message}`)
-//           .join('\n');
-//       } else if (error?.response?.data?.error) {
-//         errorM = error.response.data.error;
-//       }
-
-//       setErrorMessage(errorM)
-//       setTestResults(null)
-//     })
-// }
-
-// console.log(errorMessage)

@@ -4,7 +4,7 @@ import TestDropdownButton from './TestDropdownButton';
 import { useRecordProgressMutation } from '../state/arcadeApi';
 import { useParams } from 'react-router-dom';
 
-export default function Tests({ challenge, testResults, errorMessage }) {
+export default function Tests({ challenge, testResults = { results: [] }, errorMessage }) {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedSection, setSelectedSection] = useState('Inputs');
     const [returnDividerPosition, setReturnDividerPosition] = useState(50);
@@ -44,10 +44,9 @@ export default function Tests({ challenge, testResults, errorMessage }) {
         setOpenDropdown((prevId) => (prevId === testId ? null : testId));
     };
 
-    const totalTests = challenge.tests.length;
-    const passedTests = testResults
-        ? testResults.results.filter(result => result.passed).length
-        : 0;
+    const totalTests = challenge?.tests?.length || 0;
+    const passedTests = testResults?.results?.filter(result => result.passed).length || 0;
+
 
     const allTestsPassed = passedTests === totalTests;
 
@@ -94,7 +93,7 @@ export default function Tests({ challenge, testResults, errorMessage }) {
             )}
             {challenge.tests.map((test, index) => {
                 // Find the matching test result using the test_id
-                const result = testResults?.results.find(result => result.test_id === test.test_id);
+                const result = testResults?.results?.find(result => result.test_id === test.test_id) || null;
 
                 return (
 
@@ -121,7 +120,7 @@ export default function Tests({ challenge, testResults, errorMessage }) {
                             </div>
                             <div>
                                 {testResults ? (
-                                    testResults.results.find(result => result.test_id === test.test_id)?.passed ? (
+                                    testResults?.results?.find(result => result.test_id === test.test_id)?.passed ? (
                                         <div className="flex flex-row text-green-200">
                                             <span>Passed</span>
                                             <span>
