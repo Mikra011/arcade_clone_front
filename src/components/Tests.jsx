@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import CongratModal from './CongratModal'; 
+import CongratModal from './CongratModal';
 import TestDropdownButton from './TestDropdownButton';
 import { useRecordProgressMutation } from '../state/arcadeApi';
 import { useParams } from 'react-router-dom';
@@ -73,7 +73,24 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
     return (
         <div className="p-4">
             <CongratModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-            {testResults && (
+
+            {errorMessage && (
+                <div className="text-red-500 p-4 mb-4">
+                    <strong>{errorMessage.name}:</strong>
+                    <p>
+                        {/* Safely handle both string and object errors */}
+                        {typeof errorMessage === 'string'
+                            ? errorMessage // if it's a string, just display it
+                            : (errorMessage.message || "An unknown error occurred")} {/* if it's an object, display the message */}
+                    </p>
+                    {errorMessage.stack && (
+                        <pre className="whitespace-pre-wrap">{errorMessage.stack}</pre>
+                    )}
+                </div>
+            )}
+
+            {/* Render test results only if there is no error */}
+            {!errorMessage && testResults && (
                 <div className={`mb-4 flex items-center space-x-2 ${allTestsPassed ? 'text-green-200' : 'text-red-500'}`}>
                     <span>
                         {allTestsPassed ? (
@@ -91,6 +108,7 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
                     <span>Tests passed: {passedTests}/{totalTests}</span>
                 </div>
             )}
+
             {challenge.tests.map((test, index) => {
                 // Find the matching test result using the test_id
                 const result = testResults?.results?.find(result => result.test_id === test.test_id) || null;
@@ -99,8 +117,8 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
 
                     <div key={test.test_id} className="mb-1">
                         <div className="
-                    flex justify-between items-center cursor-pointer 
-                    p-2 border border-slate-700 overflow-hidden"
+                                flex justify-between items-center cursor-pointer 
+                                p-2 border border-slate-700 overflow-hidden"
                             onClick={() => handleDropdownClick(test.test_id)}>
                             <div className="flex items-center space-x-2">
                                 <svg
@@ -146,6 +164,7 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
                                 )}
                             </div>
                         </div>
+
                         {openDropdown === test.test_id && (
                             <div className="border border-t-0 border-l-0 border-slate-700">
                                 {test.is_sample ? (
@@ -206,9 +225,19 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
                                         {selectedSection === 'Error Output' && (
                                             <div className='flex-grow p-4 overflow-hidden'>
                                                 <h3 className="font-semibold mb-2">Error Output:</h3>
-                                                <div className="p-2">{errorMessage && (
-                                                    <span>{errorMessage}</span>
-                                                )}</div>
+                                                <div className="p-2">
+                                                    {result?.error ? (
+                                                        <div>
+                                                            {result.error.stack && (
+                                                                <pre className="whitespace-pre-wrap">
+                                                                    <strong>{result.error.name}</strong> {result.error.message}
+                                                                </pre>
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        "No errors recorded."
+                                                    )}
+                                                </div>
                                             </div>
                                         )}
                                     </div>

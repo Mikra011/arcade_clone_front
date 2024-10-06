@@ -105,6 +105,7 @@ export default function Challenge() {
 
     try {
       const response = await runTest({ code, tests: testData }).unwrap();  // Unwrap the result to catch errors
+      setErrorMessage(null);
       setTestResults(response);  // Store successful response
       console.log(response);
     } catch (error) {
@@ -113,7 +114,8 @@ export default function Challenge() {
 
       if (error.data) {
         console.error("Backend Error:", error.data);
-        setTestResults(error.data);  // You can store error details or display to the user
+        setTestResults(null);  // You can store error details or display to the user
+        setErrorMessage(error.data);
       } else {
         console.error("Unexpected Error:", error);
       }
