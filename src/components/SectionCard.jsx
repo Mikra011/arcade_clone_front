@@ -2,40 +2,49 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useGetProgressQuery } from '../state/arcadeApi';
 import Modal from './AuthModal';
+import { isTokenExpired } from '../utility/jwtUtil';
 
 export default function SectionCard({ sectionData }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [progressData, setProgressData] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [progressData, setProgressData] = useState(null)
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
+
+    // Check if the token is expired
+    const isExpired = token && isTokenExpired(token)
+
+    // If token is expired, remove it
+    if (isExpired) {
+        localStorage.removeItem('token')
+    }
 
     const { data, refetch } = useGetProgressQuery(null, {
         skip: !token, // Only fetch if the token is available
         refetchOnMountOrArgChange: true, // Automatically refetch when needed
-    });
+    })
 
     useEffect(() => {
         if (token) {
-            refetch(); // Refetch progress data when token is set
+            refetch() // Refetch progress data when token is set
         }
-    }, [token, refetch]);
+    }, [token, refetch])
 
     useEffect(() => {
         if (data) {
-            setProgressData(data.progress);
+            setProgressData(data.progress)
         }
-    }, [data]);
+    }, [data])
 
     const handleCardClick = (event) => {
         if (!token) {
-            event.preventDefault(); // Prevent navigation if not authenticated
-            setIsModalOpen(true); // Open the modal
+            event.preventDefault() // Prevent navigation if not authenticated
+            setIsModalOpen(true) // Open the modal
         }
-    };
+    }
 
     const sectionProgress = progressData?.find(
         (progress) => progress.section_name === sectionData.section_name
-    );
+    )
 
     return (
         <>
@@ -68,5 +77,5 @@ export default function SectionCard({ sectionData }) {
             {/* Modal Component */}
             {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
         </>
-    );
+    )
 }

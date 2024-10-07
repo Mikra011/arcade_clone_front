@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import { useGetUserInfoQuery } from '../state/arcadeApi';
 import AuthModal from './AuthModal';
+import { isTokenExpired } from '../utility/jwtUtil';
 
 export default function UserInfo() {
     const [isAuthModalOpen, setAuthModalOpen] = useState(false)
     const [isDropdownOpen, setDropdownOpen] = useState(false)
 
     const token = localStorage.getItem('token') // Check if user is authenticated
+
+    // Check if the token is expired
+    const isExpired = token && isTokenExpired(token);
+
+    // If token is expired, remove it
+    if (isExpired) {
+        localStorage.removeItem('token');
+    }
 
     const { data: userInfo } = useGetUserInfoQuery(undefined, {
         skip: !token // Only run query if token is available
