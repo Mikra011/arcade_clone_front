@@ -100,24 +100,24 @@ export default function Challenge() {
       }, {}),
     }));
 
-    console.log("Code:", code);
-    console.log("Test Data:", testData);
+    // console.log("Code:", code);
+    // console.log("Test Data:", testData);
 
     try {
       const response = await runTest({ code, tests: testData }).unwrap();  // Unwrap the result to catch errors
       setErrorMessage(null);
       setTestResults(response);  // Store successful response
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       // This block will now be triggered on error
-      console.error("Run Test Error:", error);
+      // console.error("Run Test Error:", error);
 
       if (error.data) {
-        console.error("Backend Error:", error.data);
+        // console.error("Backend Error:", error.data);
         setTestResults(null);  // You can store error details or display to the user
         setErrorMessage(error.data);
       } else {
-        console.error("Unexpected Error:", error);
+        // console.error("Unexpected Error:", error);
       }
     }
   }

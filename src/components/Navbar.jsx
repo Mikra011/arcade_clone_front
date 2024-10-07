@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
+import UserInfo from "./UserInfo";
 
 export default function Navbar() {
     // Access challengeName from the global state
@@ -18,7 +19,7 @@ export default function Navbar() {
     const isMainPage = location.pathname === '/'
 
     return (
-        <nav className="fixed top-0 w-full z-50 text-white bg-indigo-950 h-[40px]">
+        <nav className="fixed top-0 w-full z-40 text-white bg-indigo-950 ">
             <div className="p-2 flex justify-between items-center">
                 {/* Show back button only if not on the main page */}
                 {!isMainPage && (
@@ -39,7 +40,9 @@ export default function Navbar() {
                 )}
                 {/* Display challengeName */}
                 <div className="font-medium">{challengeName}</div>
-                <div className="border">user info</div>
+
+                <UserInfo />
+
             </div>
         </nav>
     )

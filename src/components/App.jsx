@@ -8,7 +8,7 @@ import Navbar from './Navbar';
 
 export default function App() {
   return (
-      <div className='bg-gradient-to-t from-blue-900 to-gray-700 pt-[42px]'>
+      <div className='bg-gradient-to-t from-blue-900 to-gray-700 pt-[60px]'>
         <Navbar />
         <Routes>
           <Route path="/" element={<SectionList />} />

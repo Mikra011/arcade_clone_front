@@ -17,8 +17,9 @@ export const arcadeApi = createApi({
         baseUrl,
         prepareHeaders,  // Automatically include the Authorization header
     }),
-    tagTypes: ['Sections', 'Topics', 'Challenges', 'Progress'],
+    tagTypes: ['Sections', 'Topics', 'Challenges', 'Progress', 'User'],
     endpoints: (builder) => ({
+
         // function routes
         getSections: builder.query({
             query: () => 'sections',
@@ -69,6 +70,10 @@ export const arcadeApi = createApi({
             query: () => `progress/get`,
             providesTags: ['Progress'],
         }),
+        getUserInfo: builder.query({
+            query: () => `users`,
+            providesTags: ['User'],
+        }),
     }),
 });
 
@@ -80,5 +85,6 @@ export const {
     useRegisterUserMutation,
     useLoginUserMutation,
     useRecordProgressMutation,
-    useGetProgressQuery
+    useGetProgressQuery,
+    useGetUserInfoQuery
 } = arcadeApi;

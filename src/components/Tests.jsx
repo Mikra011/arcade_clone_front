@@ -5,68 +5,68 @@ import { useRecordProgressMutation } from '../state/arcadeApi';
 import { useParams } from 'react-router-dom';
 
 export default function Tests({ challenge, testResults = { results: [] }, errorMessage }) {
-    const [openDropdown, setOpenDropdown] = useState(null);
-    const [selectedSection, setSelectedSection] = useState('Inputs');
-    const [returnDividerPosition, setReturnDividerPosition] = useState(50);
-    const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+    const [openDropdown, setOpenDropdown] = useState(null)
+    const [selectedSection, setSelectedSection] = useState('Inputs')
+    const [returnDividerPosition, setReturnDividerPosition] = useState(50)
+    const [isModalOpen, setIsModalOpen] = useState(false) // Modal state
 
-    const { id } = useParams();
-    const [recordProgress] = useRecordProgressMutation();
+    const { id } = useParams()
+    const [recordProgress] = useRecordProgressMutation()
 
-    const containerRef = useRef(null);
-    const isDragging = useRef(false);
+    const containerRef = useRef(null)
+    const isDragging = useRef(false)
 
     // Handles the movement of the divider (dragging)
     const handleMouseMove = (e) => {
-        if (!isDragging.current || !containerRef.current) return;
+        if (!isDragging.current || !containerRef.current) return
 
-        const rect = containerRef.current.getBoundingClientRect();
-        const newDividerPosition = ((e.clientX - rect.left) / rect.width) * 100;
+        const rect = containerRef.current.getBoundingClientRect()
+        const newDividerPosition = ((e.clientX - rect.left) / rect.width) * 100
 
-        setReturnDividerPosition(Math.max(0, Math.min(100, newDividerPosition))); // Keep the divider within bounds
-    };
+        setReturnDividerPosition(Math.max(0, Math.min(100, newDividerPosition))) // Keep the divider within bounds
+    }
 
     // Handles the mouse down event (when the user starts dragging)
     const handleMouseDown = () => {
         isDragging.current = true;
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
-    };
+        document.addEventListener('mousemove', handleMouseMove)
+        document.addEventListener('mouseup', handleMouseUp)
+    }
 
     // Handles the mouse up event (when the user stops dragging)
     const handleMouseUp = () => {
-        isDragging.current = false;
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-    };
+        isDragging.current = false
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+    }
 
     const handleDropdownClick = (testId) => {
-        setOpenDropdown((prevId) => (prevId === testId ? null : testId));
-    };
+        setOpenDropdown((prevId) => (prevId === testId ? null : testId))
+    }
 
-    const totalTests = challenge?.tests?.length || 0;
-    const passedTests = testResults?.results?.filter(result => result.passed).length || 0;
+    const totalTests = challenge?.tests?.length || 0
+    const passedTests = testResults?.results?.filter(result => result.passed).length || 0
 
 
-    const allTestsPassed = passedTests === totalTests;
+    const allTestsPassed = passedTests === totalTests
 
     useEffect(() => {
         if (allTestsPassed) {
-            const progressData = { challenge_id: id, completed: true };
+            const progressData = { challenge_id: id, completed: true }
 
             // Log the data being sent
-            console.log('Recording progress with data:', progressData);
+            // console.log('Recording progress with data:', progressData)
 
             // Record progress when all tests have passed
             recordProgress(progressData)
                 .unwrap()
                 .then((response) => {
-                    console.log('Progress recorded successfully:', response);
-                    setIsModalOpen(true); // Open modal when progress is recorded
+                    // console.log('Progress recorded successfully:', response)
+                    setIsModalOpen(true) // Open modal when progress is recorded
                 })
                 .catch((error) => {
-                    console.error('Failed to record progress:', error);
-                });
+                    // console.error('Failed to record progress:', error);
+                })
         }
     }, [allTestsPassed, recordProgress, id]);
 
@@ -225,11 +225,11 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
                                         {selectedSection === 'Error Output' && (
                                             <div className='flex-grow p-4 overflow-hidden'>
                                                 <h3 className="font-semibold mb-2">Error Output:</h3>
-                                                <div className="p-2">
+                                                <div className="p-2 font-base text-red-500">
                                                     {result?.error ? (
                                                         <div>
-                                                            {result.error.stack && (
-                                                                <pre className="whitespace-pre-wrap">
+                                                            {result.error && (
+                                                                <pre className="">
                                                                     <strong>{result.error.name}</strong> {result.error.message}
                                                                 </pre>
                                                             )}
@@ -250,5 +250,5 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
                 )
             })}
         </div>
-    );
+    )
 }
