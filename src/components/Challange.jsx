@@ -63,16 +63,16 @@ export default function Challenge() {
   // Dispatch getChallenge when the challenge data is fetched
   useEffect(() => {
     if (challenge) {
-      dispatch(getChallenge(challenge));
+      dispatch(getChallenge(challenge))
     }
-  }, [challenge, dispatch]);
+  }, [challenge, dispatch])
 
   // Dispatch resetChallenge on component unmount
   useEffect(() => {
     return () => {
-      dispatch(resetChallenge()); // Clear the challenge data when component unmounts
-    };
-  }, [dispatch]);
+      dispatch(resetChallenge()) // Clear the challenge data when component unmounts
+    }
+  }, [dispatch])
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
@@ -95,18 +95,18 @@ export default function Challenge() {
         acc[input.input_name] = {
           value: input.input_value,
           type: input.input_type,
-        };
-        return acc;
+        }
+        return acc
       }, {}),
-    }));
+    }))
 
     // console.log("Code:", code);
     // console.log("Test Data:", testData);
 
     try {
-      const response = await runTest({ code, tests: testData }).unwrap();  // Unwrap the result to catch errors
-      setErrorMessage(null);
-      setTestResults(response);  // Store successful response
+      const response = await runTest({ code, tests: testData }).unwrap()  // Unwrap the result to catch errors
+      setErrorMessage(null)
+      setTestResults(response)  // Store successful response
       // console.log(response);
     } catch (error) {
       // This block will now be triggered on error

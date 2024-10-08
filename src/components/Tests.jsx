@@ -113,6 +113,8 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
                 // Find the matching test result using the test_id
                 const result = testResults?.results?.find(result => result.test_id === test.test_id) || null;
 
+                const log = testResults?.logs[index] || null
+
                 return (
 
                     <div key={test.test_id} className="mb-1">
@@ -193,6 +195,7 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
                                                 </div>
                                             </div>
                                         )}
+
                                         {selectedSection === 'Return Value' && (
                                             <div
                                                 ref={containerRef}
@@ -216,20 +219,28 @@ export default function Tests({ challenge, testResults = { results: [] }, errorM
                                                 </div>
                                             </div>
                                         )}
+
                                         {selectedSection === 'Console Output' && (
                                             <div className='flex-grow p-4 overflow-hidden'>
                                                 <h3 className="font-semibold mb-2">Console Output:</h3>
-                                                <div className="p-2">Console output here</div>
+                                                <div className="p-2">
+                                                    {log ? (
+                                                        <div className="text-sm">{log}</div>
+                                                    ) : (
+                                                        <div>No console output available.</div>
+                                                    )}
+                                                </div>
                                             </div>
                                         )}
+
                                         {selectedSection === 'Error Output' && (
                                             <div className='flex-grow p-4 overflow-hidden'>
                                                 <h3 className="font-semibold mb-2">Error Output:</h3>
-                                                <div className="p-2 font-base text-red-500">
+                                                <div className="p-2 font-base text-green-300">
                                                     {result?.error ? (
                                                         <div>
                                                             {result.error && (
-                                                                <pre className="">
+                                                                <pre className="text-red-500">
                                                                     <strong>{result.error.name}</strong> {result.error.message}
                                                                 </pre>
                                                             )}
